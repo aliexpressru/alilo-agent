@@ -509,16 +509,33 @@ func prepareCommandToStart(task *model.Task) *exec.Cmd {
 		return nil
 	}
 
-	ammoFile, done := saveAmmoFromURLToFile(task.AmmoURL)
-	if !done {
-		logger.Warnf("ammo file saving error")
-		return nil
+	// Initialize ammoFile as empty string
+	var ammoFile *os.File
+	var ammoDone bool
+
+	// Only try to save ammo if AmmoURL is provided
+	if task.AmmoURL != "" {
+		ammoFile, ammoDone = saveAmmoFromURLToFile(task.AmmoURL)
+		if !ammoDone {
+			logger.Warnf("ammo file saving error")
+			return nil
+		}
+	} else {
+		logger.Infof("No ammo URL provided, proceeding without ammo file")
 	}
+
 	logger.Infof("----------scriptFile '%.100v'", scriptFile.Name())
 	task.ScriptFileName = scriptFile.Name()
 	params := prepareParams(task.ScriptFileName, task.Params, task.K6ApiPort, task.PortPrometheus)
-	params = append(params, "-e")
-	params = append(params, fmt.Sprintf("AMMO_URL=%s", ammoFile.Name()))
+
+	// Only add ammo environment variable if ammoFile was successfully created
+	if ammoFile != nil {
+		params = append(params, "-e")
+		params = append(params, fmt.Sprintf("AMMO_URL=%s", ammoFile.Name()))
+		task.AmmoURL = ammoFile.Name()
+	} else {
+		task.AmmoURL = "" // Ensure it's empty if no ammo file
+	}
 
 	scriptRunCmd := exec.Command("k6",
 		params...,
@@ -528,7 +545,6 @@ func prepareCommandToStart(task *model.Task) *exec.Cmd {
 	scriptRunCmd.Stderr = task.LogFile
 	logger.Warnf("---------- Test run command: '%v'", scriptRunCmd.String())
 
-	task.AmmoURL = ammoFile.Name()
 	return scriptRunCmd
 }
 
