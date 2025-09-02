@@ -1,0 +1,9 @@
+{
+  "ServerPort": "8888",
+  "LogLevel": "DEBUG",
+  "MTLS": {
+    "Use": false,
+    "CertFile": "cert\\cert.cer",
+    "KeyFile": "cert\\cert.key"
+  }
+}

@@ -1,0 +1,29 @@
+[
+    {
+        "maxCaloriesPerSlice": 1000,
+        "mustBeVegetarian": false,
+        "excludedIngredients": [],
+        "excludedTools": [],
+        "maxNumberOfToppings": 1,
+        "minNumberOfToppings": 2,
+        "customName": ""
+    },
+    {
+        "maxCaloriesPerSlice": 100,
+        "mustBeVegetarian": false,
+        "excludedIngredients": [],
+        "excludedTools": [],
+        "maxNumberOfToppings": 3,
+        "minNumberOfToppings": 2,
+        "customName": ""
+    },
+    {
+        "maxCaloriesPerSlice": 500,
+        "mustBeVegetarian": true,
+        "excludedIngredients": [],
+        "excludedTools": [],
+        "maxNumberOfToppings": 5,
+        "minNumberOfToppings": 4,
+        "customName": ""
+    }
+]

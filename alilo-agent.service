@@ -1,0 +1,17 @@
+[Unit]
+  Description=Alilo-agent
+
+[Service]
+  ExecStart=/usr/bin/alilo-agent -configFileName=/etc/alilo-agent/config.json -logFileName=/var/log/alilo-agent/agent.log
+  Type=idle
+  KillMode=process
+
+  SyslogIdentifier=alilo-agent
+  SyslogFacility=daemon
+
+  Restart=on-failure
+
+  User=alilo
+  Group=alilo
+[Install]
+  WantedBy=multiuser.target
