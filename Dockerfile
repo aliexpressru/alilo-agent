@@ -1,7 +1,5 @@
 FROM golang:1.20-alpine AS builder
 
-RUN apk add --no-cache git ca-certificates tzdata
-
 WORKDIR /app
 
 COPY go.mod go.sum ./
@@ -12,10 +10,11 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o alilo-agent ./cmd/main.go
 
-FROM alpine:latest
+FROM ghcr.io/grafana/k6:1.2.3
 
-RUN apk --no-cache add ca-certificates tzdata curl
+ENTRYPOINT []
 
+USER root
 RUN addgroup -g 1001 -S appgroup && \
     adduser -u 1001 -S appuser -G appgroup
 
